@@ -4,6 +4,7 @@ import(
 	"fmt"
 	"os"
 	"strings"
+
 )
 
 var opstack Stack
@@ -59,12 +60,11 @@ func PopStackUntilHigherPres(nexttop string){
 	for !IsPresHigh(nexttop, opstack.Top().(string)){
 		postfix += opstack.Top().(string)
 		opstack.Pop()
-		fmt.Println(postfix)
 	}
 }
 
 func PopStackUntilEmpty(){
-	for opstack.Empty(){
+	for !opstack.Empty(){
 		postfix += opstack.Top().(string)
 		opstack.Pop()
 	}
@@ -74,8 +74,6 @@ func IteratesString(input_infix string){
 	for i := 0; i < len(input_infix); i++ {
 		if IsOperator(string(input_infix[i])){
 			
-			fmt.Println(opstack.Empty())
-
 			if opstack.Empty() || opstack.Top().(string) == "(" || IsPresHigh(string(input_infix[i]), opstack.Top().(string)){
 				opstack.Push(string(input_infix[i]))
 			}else if !IsPresHigh(string(input_infix[i]), opstack.Top().(string)){
