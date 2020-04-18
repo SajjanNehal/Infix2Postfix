@@ -4,7 +4,6 @@ import(
 	"fmt"
 	"os"
 	"strings"
-
 )
 
 var opstack Stack
