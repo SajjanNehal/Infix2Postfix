@@ -11,12 +11,6 @@ def PopStackUntilEmpty():
 		postfix += opstack.peek()
 		opstack.pop()
 
-def PopStackUntilHigherPres(nextop):
-	global postfix
-	while not IsPresHigh(nextop, opstack.peek()):
-		postfix += opstack.peek()
-		opstack.pop()
-
 def GetOperatorWeight(op):
 	weight = -1
 	if op == "+" or op == "-":
@@ -28,7 +22,7 @@ def GetOperatorWeight(op):
 	return weight
 
 
-def IsPresHigh(nextchar, stacktop):
+def IsPresHigh(stacktop, nextchar):
 	nextchar_weight = GetOperatorWeight(nextchar)
 	stacktop_weight = GetOperatorWeight(stacktop)
 
@@ -57,17 +51,18 @@ def IterateString(input_infix):
 	global postfix
 	for i in input_infix:
 		if IsOperator(i):
-			if opstack.empty() or opstack.peek() == "(" or IsPresHigh(i, opstack.peek()):
-				opstack.push(i)
-			elif not IsPresHigh(i, opstack.peek()):
-				PopStackUntilHigherPres(i)
+			while not opstack.empty() and opstack.peek() != "(" and IsPresHigh(opstack.peek(), i):
+				postfix += opstack.peek()
+				opstack.pop()
+			opstack.push(i)
 		elif i == "(":
 			opstack.push(i)
 		elif i == ")":
-			opstack.push(i)
+			PopStackUntilLeftParenthesis()
 		else:
 			postfix += i
 	PopStackUntilEmpty()
+
 	return postfix
 
 user_input = sys.argv[1]
