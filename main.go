@@ -9,20 +9,11 @@ import(
 var opstack Stack
 var postfix string
 
-func IsOperator(C string) bool{
-	return strings.ContainsAny(C, "+ & - & * & /")
-}
-
-func PopStackUntilLeftParenthesis(){
-	for opstack.Top().(string) != "(" {
+func PopStackUntilEmpty(){
+	for !opstack.Empty(){
 		postfix += opstack.Top().(string)
 		opstack.Pop()
 	}
-}
-
-func EqualPrecedence(nextchar string){
-	postfix += opstack.Top().(string)
-	opstack.Pop()
 }
 
 func GetOperatorWeight(op string) int{
@@ -46,7 +37,6 @@ func IsPresHigh(nextchar string, stacktop string) bool{
 	stacktop_weight := GetOperatorWeight(stacktop)
 
 	if nextchar_weight == stacktop_weight{
-		EqualPrecedence(nextchar)
 		return true
 	}else if nextchar_weight > stacktop_weight{
 		return true
@@ -55,29 +45,27 @@ func IsPresHigh(nextchar string, stacktop string) bool{
 	}
 }
 
-func PopStackUntilHigherPres(nexttop string){
-	for !IsPresHigh(nexttop, opstack.Top().(string)){
+func PopStackUntilLeftParenthesis(){
+	for opstack.Top().(string) != "(" {
 		postfix += opstack.Top().(string)
 		opstack.Pop()
 	}
+	opstack.Pop()
 }
 
-func PopStackUntilEmpty(){
-	for !opstack.Empty(){
-		postfix += opstack.Top().(string)
-		opstack.Pop()
-	}
+func IsOperator(C string) bool{
+	return strings.ContainsAny(C, "+ & - & * & /")
 }
 
 func IteratesString(input_infix string){
 	for i := 0; i < len(input_infix); i++ {
 		if IsOperator(string(input_infix[i])){
 			
-			if opstack.Empty() || opstack.Top().(string) == "(" || IsPresHigh(string(input_infix[i]), opstack.Top().(string)){
-				opstack.Push(string(input_infix[i]))
-			}else if !IsPresHigh(string(input_infix[i]), opstack.Top().(string)){
-				PopStackUntilHigherPres(string(input_infix[i]))
+			for !opstack.Empty() && opstack.Top().(string) != "(" && IsPresHigh(opstack.Top().(string), string(input_infix[i])){
+				postfix += opstack.Top().(string)
+				opstack.Pop()
 			}
+			opstack.Push(string(input_infix[i]))
 		}else if string(input_infix[i]) == "(" {
 			opstack.Push(string(input_infix[i]))
 		}else if string(input_infix[i]) == ")" {
