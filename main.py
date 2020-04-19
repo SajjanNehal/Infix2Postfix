@@ -21,7 +21,6 @@ def GetOperatorWeight(op):
 		weight = 3
 	return weight
 
-
 def IsPresHigh(stacktop, nextchar):
 	nextchar_weight = GetOperatorWeight(nextchar)
 	stacktop_weight = GetOperatorWeight(stacktop)
