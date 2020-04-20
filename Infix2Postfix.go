@@ -1,8 +1,6 @@
 package main
 
 import(
-	"fmt"
-	"os"
 	"strings"
 )
 
@@ -57,7 +55,7 @@ func IsOperator(C string) bool{
 	return strings.ContainsAny(C, "+ & - & * & /")
 }
 
-func IteratesString(input_infix string){
+func IteratesString(input_infix string) string{
 	for i := 0; i < len(input_infix); i++ {
 		if IsOperator(string(input_infix[i])){
 			
@@ -75,12 +73,6 @@ func IteratesString(input_infix string){
 		}
 	}
 	PopStackUntilEmpty()
-}
 
-func main(){
-	user_input := os.Args[1]
-
-	IteratesString(user_input)
-
-	fmt.Println(postfix)
+	return postfix
 }
