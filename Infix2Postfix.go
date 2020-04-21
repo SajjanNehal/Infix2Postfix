@@ -1,9 +1,5 @@
 package main
 
-import(
-	"strings"
-)
-
 var opstack Stack
 var postfix string
 
@@ -52,10 +48,14 @@ func PopStackUntilLeftParenthesis(){
 }
 
 func IsOperator(C string) bool{
-	return strings.ContainsAny(C, "+ & - & * & /")
+	if C == "+" || C == "-" || C == "*" || C == "/" {
+		return true
+	}
+	return false
 }
 
 func IteratesString(input_infix string) string{
+	postfix = ""
 	for i := 0; i < len(input_infix); i++ {
 		if IsOperator(string(input_infix[i])){
 			
